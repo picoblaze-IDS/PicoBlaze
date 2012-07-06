@@ -1,0 +1,235 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date:    18:39:10 12/02/2010 
+-- Design Name: 
+-- Module Name:    CPU_and_Table - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- Description: 
+--
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created
+-- Additional Comments: 
+--
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+---- Uncomment the following library declaration if instantiating
+---- any Xilinx primitives in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+entity CPU_and_Table is
+    PORT(
+
+         match_strobe : OUT  std_logic;
+         out_port : OUT  std_logic_vector(7 downto 0);
+         interrupt : IN  std_logic;
+         interrupt_ack : OUT  std_logic;
+         reset : IN  std_logic;
+         clk : IN  std_logic
+        );
+end CPU_and_Table;
+
+architecture Behavioral of CPU_and_Table is
+
+    -- Component Declaration for the processor and its program store
+ 
+    COMPONENT embedded_kcpsm3
+    PORT(
+         port_id : OUT  std_logic_vector(7 downto 0);
+         write_strobe : OUT  std_logic;
+         read_strobe : OUT  std_logic;
+         out_port : OUT  std_logic_vector(7 downto 0);
+         in_port : IN  std_logic_vector(7 downto 0);
+         interrupt : IN  std_logic;
+         interrupt_ack : OUT  std_logic;
+         reset : IN  std_logic;
+         clk : IN  std_logic
+        );
+    END COMPONENT;
+
+--
+-- declaration of the data table
+--
+
+component dataTable is
+    Generic(
+	     -- port address, for picoblaze
+		  -- Note: set this to an EVEN value.
+        portnumber : std_logic_vector(7 downto 0);
+		  
+       INIT_00 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_01 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_02 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_03 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_04 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_05 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_06 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_07 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_08 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_09 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_0A : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_0B : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_0C : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_0D : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_0E : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_0F : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_10 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_11 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_12 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_13 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_14 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_15 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_16 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_17 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_18 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_19 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_1A : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_1B : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_1C : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_1D : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_1E : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_1F : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_20 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_21 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_22 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_23 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_24 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_25 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_26 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_27 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_28 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_29 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_2A : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_2B : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_2C : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_2D : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_2E : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_2F : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_30 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_31 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_32 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_33 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_34 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_35 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_36 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_37 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_38 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_39 : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_3A : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_3B : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_3C : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_3D : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_3E : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000";
+       INIT_3F : bit_vector := X"0000000000000000000000000000000000000000000000000000000000000000"
+
+    ); 
+    Port (
+        CLK : in  STD_LOGIC;
+        RST : in std_logic;
+        RD : in  STD_LOGIC;
+        WR : in  STD_LOGIC;
+        PORT_ID : in  STD_LOGIC_VECTOR (7 downto 0);
+        DATA_IN : in std_logic_vector (7 downto 0);
+        DATA_OUT : out  STD_LOGIC_VECTOR (7 downto 0) );
+end component;
+
+signal port_id : std_logic_vector(7 downto 0);
+signal write_strobeI : std_logic;
+signal out_portI : std_logic_vector(7 downto 0);
+signal read_strobe : std_logic;
+signal in_port : std_logic_vector(7 downto 0);
+
+signal src0 : std_logic_vector(7 downto 0);
+signal src1 : std_logic_vector(7 downto 0);
+
+constant MATCHPORTNUMBER : std_logic_vector(7 downto 0) := "00001000";
+signal SEL : std_logic;
+
+begin
+
+	-- Instantiate the processor and its program store
+   uut: embedded_kcpsm3 PORT MAP (
+        port_id => port_id,
+        write_strobe => write_strobeI,
+        read_strobe => read_strobe,
+        out_port => out_portI,
+        in_port => in_port,
+        interrupt => interrupt,
+        interrupt_ack => interrupt_ack,
+        reset => reset,
+        clk => clk );
+		  
+    -- when we output to MATCHPORTNUMBER, then the data will be on out_port and
+	 -- the match_strobe signal will go to logic 1.
+    out_port <= out_portI;
+    SEL <= '1' when PORT_ID(7 downto 0)=MATCHPORTNUMBER(7 downto 0) else '0';	 
+    match_strobe <= write_strobeI AND SEL;
+	
+    -- match data	table
+    dt: dataTable
+	 generic map
+	 (
+	     portnumber => "00000100",
+		  
+        -- each INIT line has 32 bytes, which are arranged in order *right to left*
+        -- hence the following line has the values 0 to 31 in order of increasing value
+        -- INIT_00 => "1F1E1D1C1B1A191817161514131211100F0E0D0C0B0A09080706050403020100",
+		  
+			INIT_00 => X"0000000320003201000000000000000248007401280068011400340100000000",
+			INIT_01 => X"0000000340007301000000000000000334006901000000000000000301000000",
+			INIT_02 => X"0000000360007401000000000000000354006F01000000000000000302000000",
+			INIT_03 => X"0000000000000000000000005400000303000000480000036C006F0100000000"
+	 )
+	 port map
+	 (
+        CLK => clk,
+        RST => reset,
+        RD => read_strobe,
+        WR => write_strobeI,
+        PORT_ID => port_id,
+        DATA_IN => out_portI,
+        DATA_OUT => src0
+    );
+	 
+	 -- network data table
+	 nw: dataTable
+	 generic map
+	 (
+	     portnumber => "00000110",
+		          
+        -- each INIT line has 32 bytes, which are arranged in order *right to left*
+        -- hence the following line has the values 0 to 31 in order of increasing value
+        -- "1F1E1D1C1B1A191817161514131211100F0E0D0C0B0A09080706050403020100"
+		  INIT_00 => X"278F6398173A1F736968642DB9DC73FBCE426F86908359CA416F746F746F7442",
+			INIT_01 => X"FCA49C93D4DF6DE9194558D833C48FB88B5115192B49B253A7FD896F7D22DE14",
+INIT_02 => X"54EDDEF343F246F746670E57637118DD9C281795719637F54617EF8D9AB3767C",
+INIT_03 => X"BA82C4D76B31E36E93E78412D34B9DB71D6F8A4D64E4777C54746F74746F749C"
+
+	 )
+	 port map
+	 (
+        CLK => clk,
+        RST => reset,
+        RD => read_strobe,
+        WR => write_strobeI,
+        PORT_ID => port_id,
+        DATA_IN => out_portI,
+        DATA_OUT => src1
+    );
+	 
+	 in_port <= src0 when port_id(2 downto 1) = "10" else
+	            src1 when port_id(2 downto 1) = "11" else
+					"00000000";
+					
+end Behavioral;
+

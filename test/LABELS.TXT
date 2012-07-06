@@ -1,0 +1,10 @@
+Table of addresses and their specified labels.
+
+000  start
+005  top
+006  loop
+013  newAddress
+016  testmatch
+01A  comparechar
+01E  drop
+020  retry

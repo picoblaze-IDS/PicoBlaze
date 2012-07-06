@@ -1,0 +1,13 @@
+Table of constant values and their specified constant labels.
+
+04  TableAddressLow_port
+05  TableAddressHigh_port
+04  TableRead_port
+06  NetworkAddressLow_port
+07  NetworkAddressHigh_port
+06  NetworkRead_port
+08  Match_port
+00  TYPE_MATCH
+01  TYPE_TEST
+02  TYPE_GOTODROP
+03  TYPE_GOTORETRY

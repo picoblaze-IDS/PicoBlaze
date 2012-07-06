@@ -1,0 +1,1230 @@
+    ADDRESS-000
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-;string matching example
+    ADDRESS-000
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; Match data table
+    ADDRESS-000
+      LABEL-
+  FORMATTED-CONSTANT TableAddressLow_port, 04
+  LOGFORMAT-CONSTANT TableAddressLow_port, 04
+INSTRUCTION-CONSTANT
+   OPERAND1-TableAddressLow_port
+  OP1 VALUE-TableAddressLow_port
+   OPERAND2-04
+  OP2 VALUE-04
+    COMMENT-
+    ADDRESS-000
+      LABEL-
+  FORMATTED-CONSTANT TableAddressHigh_port, 05
+  LOGFORMAT-CONSTANT TableAddressHigh_port, 05
+INSTRUCTION-CONSTANT
+   OPERAND1-TableAddressHigh_port
+  OP1 VALUE-TableAddressHigh_port
+   OPERAND2-05
+  OP2 VALUE-05
+    COMMENT-
+    ADDRESS-000
+      LABEL-
+  FORMATTED-CONSTANT TableRead_port, 04
+  LOGFORMAT-CONSTANT TableRead_port, 04
+INSTRUCTION-CONSTANT
+   OPERAND1-TableRead_port
+  OP1 VALUE-TableRead_port
+   OPERAND2-04
+  OP2 VALUE-04
+    COMMENT-
+    ADDRESS-000
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; Network data table
+    ADDRESS-000
+      LABEL-
+  FORMATTED-CONSTANT NetworkAddressLow_port, 06
+  LOGFORMAT-CONSTANT NetworkAddressLow_port, 06
+INSTRUCTION-CONSTANT
+   OPERAND1-NetworkAddressLow_port
+  OP1 VALUE-NetworkAddressLow_port
+   OPERAND2-06
+  OP2 VALUE-06
+    COMMENT-
+    ADDRESS-000
+      LABEL-
+  FORMATTED-CONSTANT NetworkAddressHigh_port, 07
+  LOGFORMAT-CONSTANT NetworkAddressHigh_port, 07
+INSTRUCTION-CONSTANT
+   OPERAND1-NetworkAddressHigh_port
+  OP1 VALUE-NetworkAddressHigh_port
+   OPERAND2-07
+  OP2 VALUE-07
+    COMMENT-
+    ADDRESS-000
+      LABEL-
+  FORMATTED-CONSTANT NetworkRead_port, 06
+  LOGFORMAT-CONSTANT NetworkRead_port, 06
+INSTRUCTION-CONSTANT
+   OPERAND1-NetworkRead_port
+  OP1 VALUE-NetworkRead_port
+   OPERAND2-06
+  OP2 VALUE-06
+    COMMENT-
+    ADDRESS-000
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; match output port
+    ADDRESS-000
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; can output to this port to indicate a string match
+    ADDRESS-000
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; also use for debugging.  e.g. output F0 or F1 or F2 etc to
+    ADDRESS-000
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; show where we are in the assembler code
+    ADDRESS-000
+      LABEL-
+  FORMATTED-CONSTANT Match_port, 08
+  LOGFORMAT-CONSTANT Match_port, 08
+INSTRUCTION-CONSTANT
+   OPERAND1-Match_port
+  OP1 VALUE-Match_port
+   OPERAND2-08
+  OP2 VALUE-08
+    COMMENT-
+    ADDRESS-000
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; registers to load a row of data from the match data table
+    ADDRESS-000
+      LABEL-
+  FORMATTED-NAMEREG sA, type
+  LOGFORMAT-NAMEREG sA, type
+INSTRUCTION-NAMEREG
+   OPERAND1-sA
+  OP1 VALUE-sA
+   OPERAND2-type
+  OP2 VALUE-type
+    COMMENT-
+    ADDRESS-000
+      LABEL-
+  FORMATTED-NAMEREG sB, char
+  LOGFORMAT-NAMEREG sB, char
+INSTRUCTION-NAMEREG
+   OPERAND1-sB
+  OP1 VALUE-sB
+   OPERAND2-char
+  OP2 VALUE-char
+    COMMENT-
+    ADDRESS-000
+      LABEL-
+  FORMATTED-NAMEREG sC, nshi
+  LOGFORMAT-NAMEREG sC, nshi
+INSTRUCTION-NAMEREG
+   OPERAND1-sC
+  OP1 VALUE-sC
+   OPERAND2-nshi
+  OP2 VALUE-nshi
+    COMMENT-
+    ADDRESS-000
+      LABEL-
+  FORMATTED-NAMEREG sD, nslo
+  LOGFORMAT-NAMEREG sD, nslo
+INSTRUCTION-NAMEREG
+   OPERAND1-sD
+  OP1 VALUE-sD
+   OPERAND2-nslo
+  OP2 VALUE-nslo
+    COMMENT-
+    ADDRESS-000
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; register to hold the current byte from the network
+    ADDRESS-000
+      LABEL-
+  FORMATTED-NAMEREG sE, networkInput
+  LOGFORMAT-NAMEREG sE, networkInput
+INSTRUCTION-NAMEREG
+   OPERAND1-sE
+  OP1 VALUE-sE
+   OPERAND2-networkInput
+  OP2 VALUE-networkInput
+    COMMENT-
+    ADDRESS-000
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; temporary register to put things in
+    ADDRESS-000
+      LABEL-
+  FORMATTED-NAMEREG sF, temp
+  LOGFORMAT-NAMEREG sF, temp
+INSTRUCTION-NAMEREG
+   OPERAND1-sF
+  OP1 VALUE-sF
+   OPERAND2-temp
+  OP2 VALUE-temp
+    COMMENT-
+    ADDRESS-000
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; values for the 'type' entry in a row of match data
+    ADDRESS-000
+      LABEL-
+  FORMATTED-CONSTANT TYPE_MATCH, 00
+  LOGFORMAT-CONSTANT TYPE_MATCH, 00
+INSTRUCTION-CONSTANT
+   OPERAND1-TYPE_MATCH
+  OP1 VALUE-TYPE_MATCH
+   OPERAND2-00
+  OP2 VALUE-00
+    COMMENT-
+    ADDRESS-000
+      LABEL-
+  FORMATTED-CONSTANT TYPE_TEST, 01
+  LOGFORMAT-CONSTANT TYPE_TEST, 01
+INSTRUCTION-CONSTANT
+   OPERAND1-TYPE_TEST
+  OP1 VALUE-TYPE_TEST
+   OPERAND2-01
+  OP2 VALUE-01
+    COMMENT-
+    ADDRESS-000
+      LABEL-
+  FORMATTED-CONSTANT TYPE_GOTODROP, 02
+  LOGFORMAT-CONSTANT TYPE_GOTODROP, 02
+INSTRUCTION-CONSTANT
+   OPERAND1-TYPE_GOTODROP
+  OP1 VALUE-TYPE_GOTODROP
+   OPERAND2-02
+  OP2 VALUE-02
+    COMMENT-
+    ADDRESS-000
+      LABEL-
+  FORMATTED-CONSTANT TYPE_GOTORETRY, 03
+  LOGFORMAT-CONSTANT TYPE_GOTORETRY, 03
+INSTRUCTION-CONSTANT
+   OPERAND1-TYPE_GOTORETRY
+  OP1 VALUE-TYPE_GOTORETRY
+   OPERAND2-03
+  OP2 VALUE-03
+    COMMENT-
+    ADDRESS-000
+      LABEL-start
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; initialise the hardware
+    ADDRESS-000
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; get value 00 into a register
+    ADDRESS-000
+      LABEL-
+  FORMATTED-LOAD temp, 00
+  LOGFORMAT-LOAD temp[sF], 00
+INSTRUCTION-LOAD
+   OPERAND1-temp
+  OP1 VALUE-sF
+   OPERAND2-00
+  OP2 VALUE-00
+    COMMENT-
+    ADDRESS-001
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; set hardware counter for the match data table to 0000
+    ADDRESS-001
+      LABEL-
+  FORMATTED-OUTPUT temp, TableAddressLow_port
+  LOGFORMAT-OUTPUT temp[sF], TableAddressLow_port[04]
+INSTRUCTION-OUTPUT
+   OPERAND1-temp
+  OP1 VALUE-sF
+   OPERAND2-TableAddressLow_port
+  OP2 VALUE-04
+    COMMENT-
+    ADDRESS-002
+      LABEL-
+  FORMATTED-OUTPUT temp, TableAddressHigh_port
+  LOGFORMAT-OUTPUT temp[sF], TableAddressHigh_port[05]
+INSTRUCTION-OUTPUT
+   OPERAND1-temp
+  OP1 VALUE-sF
+   OPERAND2-TableAddressHigh_port
+  OP2 VALUE-05
+    COMMENT-
+    ADDRESS-003
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; set hardware counter for the network data table to 0000
+    ADDRESS-003
+      LABEL-
+  FORMATTED-OUTPUT temp, NetworkAddressLow_port
+  LOGFORMAT-OUTPUT temp[sF], NetworkAddressLow_port[06]
+INSTRUCTION-OUTPUT
+   OPERAND1-temp
+  OP1 VALUE-sF
+   OPERAND2-NetworkAddressLow_port
+  OP2 VALUE-06
+    COMMENT-
+    ADDRESS-004
+      LABEL-
+  FORMATTED-OUTPUT temp, NetworkAddressHigh_port
+  LOGFORMAT-OUTPUT temp[sF], NetworkAddressHigh_port[07]
+INSTRUCTION-OUTPUT
+   OPERAND1-temp
+  OP1 VALUE-sF
+   OPERAND2-NetworkAddressHigh_port
+  OP2 VALUE-07
+    COMMENT-
+    ADDRESS-005
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-;
+    ADDRESS-005
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; the main loop
+    ADDRESS-005
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-;
+    ADDRESS-005
+      LABEL-top
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; get next byte from network into the register 'networkInput'
+    ADDRESS-005
+      LABEL-
+  FORMATTED-INPUT networkInput, NetworkRead_port
+  LOGFORMAT-INPUT networkInput[sE], NetworkRead_port[06]
+INSTRUCTION-INPUT
+   OPERAND1-networkInput
+  OP1 VALUE-sE
+   OPERAND2-NetworkRead_port
+  OP2 VALUE-06
+    COMMENT-
+    ADDRESS-006
+      LABEL-loop
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; get next row from the match data table
+    ADDRESS-006
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; reads a row of 4 bytes at the current match table address
+    ADDRESS-006
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; and leaves the table address register pointing to the next row
+    ADDRESS-006
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; the row is now stored in registers: type, char, nshi, nslo
+    ADDRESS-006
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; we can now access this data for the current row directly via the registers
+    ADDRESS-006
+      LABEL-
+  FORMATTED-INPUT type, TableRead_port
+  LOGFORMAT-INPUT type[sA], TableRead_port[04]
+INSTRUCTION-INPUT
+   OPERAND1-type
+  OP1 VALUE-sA
+   OPERAND2-TableRead_port
+  OP2 VALUE-04
+    COMMENT-
+    ADDRESS-007
+      LABEL-
+  FORMATTED-INPUT char, TableRead_port
+  LOGFORMAT-INPUT char[sB], TableRead_port[04]
+INSTRUCTION-INPUT
+   OPERAND1-char
+  OP1 VALUE-sB
+   OPERAND2-TableRead_port
+  OP2 VALUE-04
+    COMMENT-
+    ADDRESS-008
+      LABEL-
+  FORMATTED-INPUT nshi, TableRead_port
+  LOGFORMAT-INPUT nshi[sC], TableRead_port[04]
+INSTRUCTION-INPUT
+   OPERAND1-nshi
+  OP1 VALUE-sC
+   OPERAND2-TableRead_port
+  OP2 VALUE-04
+    COMMENT-
+    ADDRESS-009
+      LABEL-
+  FORMATTED-INPUT nslo, TableRead_port
+  LOGFORMAT-INPUT nslo[sD], TableRead_port[04]
+INSTRUCTION-INPUT
+   OPERAND1-nslo
+  OP1 VALUE-sD
+   OPERAND2-TableRead_port
+  OP2 VALUE-04
+    COMMENT-
+    ADDRESS-00A
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-;OUTPUT networkInput, Match_port
+    ADDRESS-00A
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; If the type is 0 (test match)
+    ADDRESS-00A
+      LABEL-
+  FORMATTED-COMPARE type, 00
+  LOGFORMAT-COMPARE type[sA], 00
+INSTRUCTION-COMPARE
+   OPERAND1-type
+  OP1 VALUE-sA
+   OPERAND2-00
+  OP2 VALUE-00
+    COMMENT-
+    ADDRESS-00B
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; Call testmatch
+    ADDRESS-00B
+      LABEL-
+  FORMATTED-CALL Z, testmatch
+  LOGFORMAT-CALL Z, testmatch[016]
+INSTRUCTION-CALL
+   OPERAND1-Z
+  OP1 VALUE-Z
+   OPERAND2-testmatch
+  OP2 VALUE-016
+    COMMENT-
+    ADDRESS-00C
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; If the type is 1 (compare character)
+    ADDRESS-00C
+      LABEL-
+  FORMATTED-COMPARE type, 01
+  LOGFORMAT-COMPARE type[sA], 01
+INSTRUCTION-COMPARE
+   OPERAND1-type
+  OP1 VALUE-sA
+   OPERAND2-01
+  OP2 VALUE-01
+    COMMENT-
+    ADDRESS-00D
+      LABEL-
+  FORMATTED-CALL Z, comparechar
+  LOGFORMAT-CALL Z, comparechar[01A]
+INSTRUCTION-CALL
+   OPERAND1-Z
+  OP1 VALUE-Z
+   OPERAND2-comparechar
+  OP2 VALUE-01A
+    COMMENT-
+    ADDRESS-00E
+      LABEL-
+  FORMATTED-COMPARE type, 02
+  LOGFORMAT-COMPARE type[sA], 02
+INSTRUCTION-COMPARE
+   OPERAND1-type
+  OP1 VALUE-sA
+   OPERAND2-02
+  OP2 VALUE-02
+    COMMENT-
+    ADDRESS-00F
+      LABEL-
+  FORMATTED-CALL Z, drop
+  LOGFORMAT-CALL Z, drop[01E]
+INSTRUCTION-CALL
+   OPERAND1-Z
+  OP1 VALUE-Z
+   OPERAND2-drop
+  OP2 VALUE-01E
+    COMMENT-
+    ADDRESS-010
+      LABEL-
+  FORMATTED-COMPARE type, 03
+  LOGFORMAT-COMPARE type[sA], 03
+INSTRUCTION-COMPARE
+   OPERAND1-type
+  OP1 VALUE-sA
+   OPERAND2-03
+  OP2 VALUE-03
+    COMMENT-
+    ADDRESS-011
+      LABEL-
+  FORMATTED-CALL Z, retry
+  LOGFORMAT-CALL Z, retry[020]
+INSTRUCTION-CALL
+   OPERAND1-Z
+  OP1 VALUE-Z
+   OPERAND2-retry
+  OP2 VALUE-020
+    COMMENT-
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; Some notes
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-;
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; we now have the current byte from the network in 'networkInput'
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; and the current row from the match data table in four registers
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; we can check the value in the register 'type' to work out what action
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; to take.  See notes in original 'table.txt' file, which are:
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-;
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; * four different types of row, all 4 bytes long
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; *
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; * 0, 0, 0, Match, // first row of a state, which may indicate a string match
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; * 1, test, next1, next0, // compare current character with 'test' and if equal goto next1:next0
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; * 2, 0, next1, next0, // goto next1:next0 and drop current character
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; * 3, 0, next1, next0, // goto next1:next0 and retry with current character
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-;
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; for row type 1 we can compare the registers 'char' and 'networkInput'
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-;
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; we can 'goto next1:next2' by calling subroutine: 'newaddress'. This will update
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; the current value in the hardware counter with the address in registers: nshi and nslo
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-;
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; we can indicate a match by doing an OUPUT to port 'Match_port'
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-;
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; after we have performed any action, then:
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-;     in case of row type 2 and for row type 1 if the characters match, then
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-;     we need to jump back to label 'top' to get a new byte from the network
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-;
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; otherwise we need to jump back to label 'loop' to get the next row from
+    ADDRESS-012
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; from the match data tabel to process
+    ADDRESS-012
+      LABEL-
+  FORMATTED-JUMP loop
+  LOGFORMAT-JUMP loop[006]
+INSTRUCTION-JUMP
+   OPERAND1-loop
+  OP1 VALUE-006
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-
+    ADDRESS-013
+      LABEL-newAddress
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; subroutine to update the hardware counter for the match data table
+    ADDRESS-013
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; this is then set to the values that are currently in the registers nshi:nslo
+    ADDRESS-013
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; and allows us to 'jump' to the address shown in the current row
+    ADDRESS-013
+      LABEL-
+  FORMATTED-OUTPUT nslo, TableAddressLow_port
+  LOGFORMAT-OUTPUT nslo[sD], TableAddressLow_port[04]
+INSTRUCTION-OUTPUT
+   OPERAND1-nslo
+  OP1 VALUE-sD
+   OPERAND2-TableAddressLow_port
+  OP2 VALUE-04
+    COMMENT-
+    ADDRESS-014
+      LABEL-
+  FORMATTED-OUTPUT nshi, TableAddressHigh_port
+  LOGFORMAT-OUTPUT nshi[sC], TableAddressHigh_port[05]
+INSTRUCTION-OUTPUT
+   OPERAND1-nshi
+  OP1 VALUE-sC
+   OPERAND2-TableAddressHigh_port
+  OP2 VALUE-05
+    COMMENT-
+    ADDRESS-015
+      LABEL-
+  FORMATTED-RETURN
+  LOGFORMAT-RETURN
+INSTRUCTION-RETURN
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-
+    ADDRESS-016
+      LABEL-testmatch
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-
+    ADDRESS-016
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; If there is no match
+    ADDRESS-016
+      LABEL-
+  FORMATTED-COMPARE nslo, 00
+  LOGFORMAT-COMPARE nslo[sD], 00
+INSTRUCTION-COMPARE
+   OPERAND1-nslo
+  OP1 VALUE-sD
+   OPERAND2-00
+  OP2 VALUE-00
+    COMMENT-
+    ADDRESS-017
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; Return
+    ADDRESS-017
+      LABEL-
+  FORMATTED-RETURN Z
+  LOGFORMAT-RETURN Z
+INSTRUCTION-RETURN
+   OPERAND1-Z
+  OP1 VALUE-Z
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-
+    ADDRESS-018
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; Else, output word's "id" to match port
+    ADDRESS-018
+      LABEL-
+  FORMATTED-OUTPUT nslo, Match_port
+  LOGFORMAT-OUTPUT nslo[sD], Match_port[08]
+INSTRUCTION-OUTPUT
+   OPERAND1-nslo
+  OP1 VALUE-sD
+   OPERAND2-Match_port
+  OP2 VALUE-08
+    COMMENT-
+    ADDRESS-019
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; Get a new byte from the network
+    ADDRESS-019
+      LABEL-
+  FORMATTED-JUMP loop
+  LOGFORMAT-JUMP loop[006]
+INSTRUCTION-JUMP
+   OPERAND1-loop
+  OP1 VALUE-006
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-
+    ADDRESS-01A
+      LABEL-comparechar
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-
+    ADDRESS-01A
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; Compare current char with packet char
+    ADDRESS-01A
+      LABEL-
+  FORMATTED-COMPARE char, networkInput
+  LOGFORMAT-COMPARE char[sB], networkInput[sE]
+INSTRUCTION-COMPARE
+   OPERAND1-char
+  OP1 VALUE-sB
+   OPERAND2-networkInput
+  OP2 VALUE-sE
+    COMMENT-
+    ADDRESS-01B
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; Return if different
+    ADDRESS-01B
+      LABEL-
+  FORMATTED-RETURN NZ
+  LOGFORMAT-RETURN NZ
+INSTRUCTION-RETURN
+   OPERAND1-NZ
+  OP1 VALUE-NZ
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-
+    ADDRESS-01C
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; Else, go to new address
+    ADDRESS-01C
+      LABEL-
+  FORMATTED-CALL newAddress
+  LOGFORMAT-CALL newAddress[013]
+INSTRUCTION-CALL
+   OPERAND1-newAddress
+  OP1 VALUE-013
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-
+    ADDRESS-01D
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; Fetch new char
+    ADDRESS-01D
+      LABEL-
+  FORMATTED-JUMP top
+  LOGFORMAT-JUMP top[005]
+INSTRUCTION-JUMP
+   OPERAND1-top
+  OP1 VALUE-005
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-
+    ADDRESS-01E
+      LABEL-drop
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-
+    ADDRESS-01E
+      LABEL-
+  FORMATTED-CALL newAddress
+  LOGFORMAT-CALL newAddress[013]
+INSTRUCTION-CALL
+   OPERAND1-newAddress
+  OP1 VALUE-013
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-
+    ADDRESS-01F
+      LABEL-
+  FORMATTED-JUMP top
+  LOGFORMAT-JUMP top[005]
+INSTRUCTION-JUMP
+   OPERAND1-top
+  OP1 VALUE-005
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-
+    ADDRESS-020
+      LABEL-retry
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-
+    ADDRESS-020
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; Go to new address
+    ADDRESS-020
+      LABEL-
+  FORMATTED-CALL newAddress
+  LOGFORMAT-CALL newAddress[013]
+INSTRUCTION-CALL
+   OPERAND1-newAddress
+  OP1 VALUE-013
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-
+    ADDRESS-021
+      LABEL-
+  FORMATTED-
+  LOGFORMAT-
+INSTRUCTION-
+   OPERAND1-
+  OP1 VALUE-
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-; Continue with the same char
+    ADDRESS-021
+      LABEL-
+  FORMATTED-JUMP loop
+  LOGFORMAT-JUMP loop[006]
+INSTRUCTION-JUMP
+   OPERAND1-loop
+  OP1 VALUE-006
+   OPERAND2-
+  OP2 VALUE-
+    COMMENT-

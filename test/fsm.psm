@@ -1,0 +1,147 @@
+             ;string matching example
+
+             ; Match data table
+             CONSTANT TableAddressLow_port, 04
+             CONSTANT TableAddressHigh_port, 05
+             CONSTANT TableRead_port, 04
+
+             ; Network data table
+             CONSTANT NetworkAddressLow_port, 06
+             CONSTANT NetworkAddressHigh_port, 07
+             CONSTANT NetworkRead_port, 06
+
+             ; match output port
+             ; can output to this port to indicate a string match
+             ; also use for debugging.  e.g. output F0 or F1 or F2 etc to
+             ; show where we are in the assembler code
+             CONSTANT Match_port, 08
+
+             ; registers to load a row of data from the match data table
+             NAMEREG sA, type
+             NAMEREG sB, char
+             NAMEREG sC, nshi
+             NAMEREG sD, nslo
+
+             ; register to hold the current byte from the network
+             NAMEREG sE, networkInput
+
+             ; temporary register to put things in
+             NAMEREG sF, temp
+
+             ; values for the 'type' entry in a row of match data
+             CONSTANT TYPE_MATCH, 00
+             CONSTANT TYPE_TEST, 01
+             CONSTANT TYPE_GOTODROP, 02
+             CONSTANT TYPE_GOTORETRY, 03
+
+
+start:       ; initialise the hardware
+             ; get value 00 into a register
+             LOAD temp, 00
+             ; set hardware counter for the match data table to 0000
+             OUTPUT temp, TableAddressLow_port
+             OUTPUT temp, TableAddressHigh_port
+             ; set hardware counter for the network data table to 0000
+             OUTPUT temp, NetworkAddressLow_port
+             OUTPUT temp, NetworkAddressHigh_port
+
+
+             ;
+             ; the main loop
+             ;
+
+top:         ; get next byte from network into the register 'networkInput'
+             INPUT networkInput, NetworkRead_port
+
+loop:        ; get next row from the match data table
+             ; reads a row of 4 bytes at the current match table address
+             ; and leaves the table address register pointing to the next row
+             ; the row is now stored in registers: type, char, nshi, nslo
+             ; we can now access this data for the current row directly via the registers
+             INPUT type, TableRead_port
+             INPUT char, TableRead_port
+             INPUT nshi, TableRead_port
+             INPUT nslo, TableRead_port
+             
+             ;OUTPUT networkInput, Match_port
+             
+             ; If the type is 0 (test match)
+             COMPARE type, 00
+             ; Call testmatch
+             CALL Z, testmatch
+             ; If the type is 1 (compare character)
+             COMPARE type, 01
+             CALL Z, comparechar
+             COMPARE type, 02
+             CALL Z, drop
+             COMPARE type, 03
+             CALL Z, retry
+             
+             ; Some notes
+             ;
+             ; we now have the current byte from the network in 'networkInput'
+             ; and the current row from the match data table in four registers
+             ; we can check the value in the register 'type' to work out what action
+             ; to take.  See notes in original 'table.txt' file, which are:
+             ;
+             ; * four different types of row, all 4 bytes long
+             ; *
+             ; *	0,	0,	0,	Match,	// first row of a state, which may indicate a string match
+             ; *	1,	test,	next1,	next0,	// compare current character with 'test' and if equal goto next1:next0
+             ; *	2,	0,	next1,	next0,	// goto next1:next0 and drop current character	
+             ; *	3,	0,	next1,	next0,	// goto next1:next0 and retry with current character
+             ;
+             ; for row type 1 we can compare the registers 'char' and 'networkInput'
+             ;
+             ; we can 'goto next1:next2' by calling subroutine: 'newaddress'. This will update
+             ; the current value in the hardware counter with the address in registers: nshi and nslo
+             ;
+             ; we can indicate a match by doing an OUPUT to port 'Match_port'
+             ;
+             ; after we have performed any action, then:
+             ;     in case of row type 2 and for row type 1 if the characters match, then
+             ;     we need to jump back to label 'top' to get a new byte from the network
+             ;
+             ; otherwise we need to jump back to label 'loop' to get the next row from
+             ; from the match data tabel to process
+
+             JUMP loop
+
+ 
+newAddress:  ; subroutine to update the hardware counter for the match data table
+             ; this is then set to the values that are currently in the registers nshi:nslo
+             ; and allows us to 'jump' to the address shown in the current row
+             OUTPUT nslo, TableAddressLow_port
+             OUTPUT nshi, TableAddressHigh_port
+             RETURN
+             
+testmatch:
+          ; If there is no match
+          COMPARE nslo, 00
+          ; Return
+          RETURN Z
+          ; Else, output word's "id" to match port
+          OUTPUT nslo, Match_port
+          ; Get a new byte from the network
+          JUMP loop
+          
+comparechar:
+            ; Compare current char with packet char
+            COMPARE char, networkInput
+            ; Return if different
+            RETURN NZ
+            ; Else, go to new address
+            CALL newAddress
+            ; Fetch new char
+            JUMP top
+            
+drop:
+     CALL newAddress
+     JUMP top
+            
+retry:
+      ; Go to new address
+      CALL newAddress
+      ; Continue with the same char
+      JUMP loop
+          
