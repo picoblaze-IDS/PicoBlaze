@@ -1,0 +1,446 @@
+             ;string matching example
+
+             ; Match data table
+             CONSTANT TableAddressLow_port, 04
+             CONSTANT TableAddressHigh_port, 05
+             CONSTANT TableRead_port, 04
+
+             ; Network data table
+             CONSTANT NetworkAddressLow_port, 06
+             CONSTANT NetworkAddressHigh_port, 07
+             CONSTANT NetworkRead_port, 06
+
+             ; match output port
+             ; can output to this port to indicate a string match
+             ; also use for debugging.  e.g. output F0 or F1 or F2 etc to
+             ; show where we are in the assembler code
+             CONSTANT Match_port, 08
+
+             ; registers to load a row of data from the match data table
+             NAMEREG sA, type
+             NAMEREG sB, char
+             NAMEREG sC, nshi
+             NAMEREG sD, nslo
+
+             ; register to hold the current byte from the network
+             NAMEREG sE, networkInput
+
+             ; temporary register to put things in
+             NAMEREG sF, temp
+             
+             ; registers to store the retry address before checking
+             ; the IP addresses and ports
+             NAMEREG s0, retryhi
+             NAMEREG s1, retrylo
+             
+             NAMEREG s2, packetSize
+             
+             NAMEREG s3, offset
+             
+             NAMEREG s4, wordId
+
+             ; values for the 'type' entry in a row of match data
+             CONSTANT TYPE_MATCH, 00
+             CONSTANT TYPE_TEST, 01
+             CONSTANT TYPE_GOTODROP, 02
+             CONSTANT TYPE_GOTORETRY, 03
+             CONSTANT TYPE_PROTOCOL, 04
+
+             ; protocol
+             CONSTANT ANY, FF
+             CONSTANT TCP, 06
+             CONSTANT UDP, 0B
+             
+             ; packet protocol (scratchpad ram address)
+             CONSTANT PACKET_PROTOCOL, 00
+             
+             ; packet IP from (scratchpad ram address)
+             CONSTANT PACKET_IPFROM, 01
+             CONSTANT PACKET_IPFROM2, 02
+             CONSTANT PACKET_IPFROM3, 03
+             CONSTANT PACKET_IPFROM4, 04
+             
+             ; packet port from (scratchpad ram address)
+             CONSTANT PACKET_PORTFROM, 05
+             CONSTANT PACKET_PORTFROM2, 06
+             
+             ; packet IP to (scratchpad ram address)
+             CONSTANT PACKET_IPTO, 07
+             CONSTANT PACKET_IPTO2, 08
+             CONSTANT PACKET_IPTO3, 09
+             CONSTANT PACKET_IPTO4, 0A
+             
+             ; packet port to (scratchpad ram address)
+             CONSTANT PACKET_PORTTO, 0B
+             CONSTANT PACKET_PORTTO2, 0C
+             
+             ; Offset to jump to to get the IP packet length in 32-bits words
+             ; MAC header = 14 bytes
+             CONSTANT IP_HEADER_LEN_OFFSET, 0E
+             ; Offset to jump to to get the protocol in the IP packet
+             ; Beginning of IP header to protocol = 9 bytes
+             CONSTANT IP_PROTOCOL_OFFSET, 17
+             ; Protocol + checksum = 3 bytes
+             CONSTANT IP_PROTOCOL_SOURCE_ADDR_OFFSET, 1A
+             
+             ; Offset to jump to to get the TCP header length in 32-bits words
+             CONSTANT TCP_HEADER_LEN_OFFSET, 0C
+             
+             ; Size of the header before the data
+             CONSTANT UDP_HEADER_SIZE, 04
+
+start:       ; initialise the hardware
+             ; get value 00 into a register
+             LOAD temp, 00
+             ; set hardware counter for the match data table to 0000
+             OUTPUT temp, TableAddressLow_port
+             OUTPUT temp, TableAddressHigh_port
+             
+             LOAD offset, IP_HEADER_LEN_OFFSET
+             CALL jumpToTempOffset
+             ; 0F in binary is 00001111
+             ; The size of the IP packet is stored on the last 4 bits of the first byte
+             ; Therefore the AND operation is used to set the first 4 bits (the version) to 0
+             AND networkInput, 0F
+             LOAD packetSize, networkInput
+             
+             LOAD offset, IP_PROTOCOL_OFFSET
+             ; jump to the specified offset
+             CALL jumpToTempOffset
+             ; store the protocol into the scratchpad ram
+             STORE networkInput, PACKET_PROTOCOL
+
+             ;
+             ; store the packet IPs into the scratchpad ram
+             ;
+             LOAD offset, IP_PROTOCOL_SOURCE_ADDR_OFFSET ; load the offset in a register
+             CALL jumpToTempOffset ; jump to this offset
+             STORE networkInput, PACKET_IPFROM ; store the corresponding byte into the scratchpad ram
+             
+             ADD offset, 01
+             CALL jumpToTempOffset
+             STORE networkInput, PACKET_IPFROM2
+             
+             ADD offset, 01
+             CALL jumpToTempOffset
+             STORE networkInput, PACKET_IPFROM3
+             
+             ADD offset, 01
+             CALL jumpToTempOffset
+             STORE networkInput, PACKET_IPFROM4
+
+             ADD offset, 01
+             CALL jumpToTempOffset
+             STORE networkInput, PACKET_IPTO
+
+             ADD offset, 01
+             CALL jumpToTempOffset
+             STORE networkInput, PACKET_IPTO2
+
+             ADD offset, 01
+             CALL jumpToTempOffset
+             STORE networkInput, PACKET_IPTO3
+
+             ADD offset, 01
+             CALL jumpToTempOffset
+             STORE networkInput, PACKET_IPTO4
+
+             ;
+             ; Store the ports into the scratchpad ram
+             ;
+             ; Multiply the packet size by 4 to get it in bytes
+             SL0 packetSize
+             SL0 packetSize
+             ADD packetSize, IP_HEADER_LEN_OFFSET ; Add the size of the Ethernet frame
+             LOAD offset, packetSize
+             CALL jumpToTempOffset ; Jump of the size of the IP packet
+             STORE networkInput, PACKET_PORTFROM
+             
+             ADD offset, 01
+             CALL jumpToTempOffset
+             STORE networkInput, PACKET_PORTFROM2
+
+             ADD offset, 01
+             CALL jumpToTempOffset
+             STORE networkInput, PACKET_PORTTO
+
+             ADD offset, 01
+             CALL jumpToTempOffset
+             STORE networkInput, PACKET_PORTTO2
+
+             SUB offset, 03 ; Remove 3 to go back to the beginning of the TCP packet
+             FETCH temp, PACKET_PROTOCOL
+             ;
+             ; We jump according to the protocol we fetched in the IP packet
+             ;
+             COMPARE temp, TCP
+             CALL Z, tcpJump
+             COMPARE temp, UDP
+             CALL Z, udpJump
+             
+             ;
+             ; the main loop
+             ;
+
+top:         ; get next byte from network into the register 'networkInput'
+             INPUT networkInput, NetworkRead_port
+
+loop:        ; get next row from the match data table
+             ; reads a row of 4 bytes at the current match table address
+             ; and leaves the table address register pointing to the next row
+             ; the row is now stored in registers: type, char, nshi, nslo
+             ; we can now access this data for the current row directly via the registers
+             INPUT type, TableRead_port
+             INPUT char, TableRead_port
+             INPUT nshi, TableRead_port
+             INPUT nslo, TableRead_port
+             
+             COMPARE type, TYPE_MATCH
+             CALL Z, testmatch
+             COMPARE type, TYPE_TEST
+             CALL Z, comparechar
+             COMPARE type, TYPE_GOTODROP
+             CALL Z, drop
+             COMPARE type, TYPE_GOTORETRY
+             CALL Z, retry
+             
+             ; Some notes
+             ;
+             ; we now have the current byte from the network in 'networkInput'
+             ; and the current row from the match data table in four registers
+             ; we can check the value in the register 'type' to work out what action
+             ; to take.  See notes in original 'table.txt' file, which are:
+             ;
+             ; * four different types of row, all 4 bytes long
+             ; *
+             ; *	0,	0,	0,	Match,	// first row of a state, which may indicate a string match
+             ; *	1,	test,	next1,	next0,	// compare current character with 'test' and if equal goto next1:next0
+             ; *	2,	0,	next1,	next0,	// goto next1:next0 and drop current character	
+             ; *	3,	0,	next1,	next0,	// goto next1:next0 and retry with current character
+             ;
+             ; for row type 1 we can compare the registers 'char' and 'networkInput'
+             ;
+             ; we can 'goto next1:next2' by calling subroutine: 'newaddress'. This will update
+             ; the current value in the hardware counter with the address in registers: nshi and nslo
+             ;
+             ; we can indicate a match by doing an OUPUT to port 'Match_port'
+             ;
+             ; after we have performed any action, then:
+             ;     in case of row type 2 and for row type 1 if the characters match, then
+             ;     we need to jump back to label 'top' to get a new byte from the network
+             ;
+             ; otherwise we need to jump back to label 'loop' to get the next row from
+             ; from the match data table to process
+
+             JUMP loop
+
+ 
+newAddress:  ; subroutine to update the hardware counter for the match data table
+             ; this is then set to the values that are currently in the registers nshi:nslo
+             ; and allows us to 'jump' to the address shown in the current row
+             OUTPUT nslo, TableAddressLow_port
+             OUTPUT nshi, TableAddressHigh_port
+             RETURN
+             
+testmatch:
+          COMPARE nslo, 00 ; If there is no match
+          RETURN Z ; Return. The next line is a retry operation, so the program will read it and jump, ignoring the instructions about IP addresses and ports
+          LOAD wordId, nslo
+          CALL nextrowdt ; Get the next row from the row data table (retry)
+          ; Store the retry address
+          LOAD retryhi, nshi
+          LOAD retrylo, nslo
+          CALL nextrowdt ; Get the protocol
+          COMPARE nslo, TCP ; If it is TCP
+          CALL Z, tcp
+          COMPARE nslo, UDP ; If it is UDP
+          CALL Z, udp
+          CALL nextrowdt ; Get the start of the "IP from" range
+          CALL checkIPFromLowRange
+          CALL nextrowdt ; Get the end of the "IP from" range
+          CALL checkIPFromHighRange
+          CALL nextrowdt ; Get the "port from" range
+          CALL checkPortFromRange
+          CALL nextrowdt ; Get the start of the "IP to" range
+          CALL checkIPToLowRange
+          CALL nextrowdt ; Get the end of the "IP to" range
+          CALL checkIPToHighRange
+          CALL nextrowdt ; Get the "port to" range
+          CALL checkPortToRange
+          OUTPUT wordId, Match_port ; If we have a match, we output the word's "id" to match port
+          JUMP loop ; Get a new byte from the network
+
+checkPortFromRange:
+               FETCH temp, PACKET_PORTFROM
+               SUB temp, type ; We substract the first part of the port of the packet with the first part of the port we have to match
+               CALL C, reloadAndRetry ; If the carry flag is set (the result is negative), the port is outside the lowest range, so we stop the matching
+               COMPARE temp, 00
+               FETCH temp, PACKET_PORTFROM2
+               CALL Z, checkLowestPortSecondByte ; If the first bytes are equal, we have to compare the last bytes
+               FETCH temp, PACKET_PORTFROM
+               SUB nshi, temp ; We substract the first part of the port we have to match with the first part of the port of the packet
+               CALL C, reloadAndRetry ; If the carry flag is set (the result is negative), the port is outside the highest range, so we stop the matching
+               COMPARE nshi, 00
+               FETCH temp, PACKET_PORTFROM2
+               CALL Z, checkHighestPortSecondByte ; If the first bytes are equal, we have to compare the last bytes
+               RETURN ; If everything matched, we continue
+
+checkPortToRange:
+               FETCH temp, PACKET_PORTTO
+               SUB temp, type ; We substract the first part of the port of the packet with the first part of the port we have to match
+               CALL C, reloadAndRetry ; If the carry flag is set (the result is negative), the port is outside the lowest range, so we stop the matching
+               COMPARE temp, 00
+               FETCH temp, PACKET_PORTTO2
+               CALL Z, checkLowestPortSecondByte ; If the first bytes are equal, we have to compare the last bytes
+               FETCH temp, PACKET_PORTTO
+               SUB nshi, temp ; We substract the first part of the port we have to match with the first part of the port of the packet
+               CALL C, reloadAndRetry ; If the carry flag is set (the result is negative), the port is outside the highest range, so we stop the matching
+               COMPARE nshi, 00
+               FETCH temp, PACKET_PORTTO2
+               CALL Z, checkHighestPortSecondByte ; If the first bytes are equal, we have to compare the last bytes
+               RETURN ; If everything matched, we continue
+
+checkLowestPortSecondByte:
+               SUB temp, char
+               CALL C, reloadAndRetry
+               RETURN
+
+checkHighestPortSecondByte:
+               SUB nslo, temp
+               CALL C, reloadAndRetry
+               RETURN
+
+checkIPFromLowRange:
+                FETCH temp, PACKET_IPFROM
+                SUB temp, type ; We substract the first part of the IP address of the packet with the first part of the IP address we have to match
+                CALL C, reloadAndRetry ; If the carry flag is set (the result is negative), the IP address is outside the range, so we stop the matching
+                FETCH temp, PACKET_IPFROM2
+                SUB temp, char
+                CALL C, reloadAndRetry
+                FETCH temp, PACKET_IPFROM3
+                SUB temp, nshi
+                CALL C, reloadAndRetry
+                FETCH temp, PACKET_IPFROM4
+                SUB temp, nslo
+                CALL C, reloadAndRetry
+                RETURN ; If everything matched, we continue
+
+checkIPFromHighRange:
+                FETCH temp, PACKET_IPFROM
+                SUB type, temp ; We substract the first part of the IP address we have to match with the first part of the IP address of the packet
+                CALL C, reloadAndRetry ; If the carry flag is set (the result is negative), the IP address is outside the range, so we stop the matching
+                FETCH temp, PACKET_IPFROM2
+                SUB char, temp
+                CALL C, reloadAndRetry
+                FETCH temp, PACKET_IPFROM3
+                SUB nshi, temp
+                CALL C, reloadAndRetry
+                FETCH temp, PACKET_IPFROM4
+                SUB nslo, temp
+                CALL C, reloadAndRetry
+                RETURN ; If everything matched, we continue
+
+checkIPToLowRange:
+                FETCH temp, PACKET_IPTO
+                SUB temp, type ; We substract the first part of the IP address of the packet with the first part of the IP address we have to match
+                CALL C, reloadAndRetry ; If the carry flag is set (the result is negative), the IP address is outside the range, so we stop the matching
+                FETCH temp, PACKET_IPTO2
+                SUB temp, char
+                CALL C, reloadAndRetry
+                FETCH temp, PACKET_IPTO3
+                SUB temp, nshi
+                CALL C, reloadAndRetry
+                FETCH temp, PACKET_IPTO4
+                SUB temp, nslo
+                CALL C, reloadAndRetry
+                RETURN ; If everything matched, we continue
+
+checkIPToHighRange:
+                FETCH temp, PACKET_IPTO
+                SUB type, temp ; We substract the first part of the IP address we have to match with the first part of the IP address of the packet
+                CALL C, reloadAndRetry ; If the carry flag is set (the result is negative), the IP address is outside the range, so we stop the matching
+                FETCH temp, PACKET_IPTO2
+                SUB char, temp
+                CALL C, reloadAndRetry
+                FETCH temp, PACKET_IPTO3
+                SUB nshi, temp
+                CALL C, reloadAndRetry
+                FETCH temp, PACKET_IPTO4
+                SUB nslo, temp
+                CALL C, reloadAndRetry
+                RETURN ; If everything matched, we continue
+
+reloadAndRetry:
+    LOAD nshi, retryhi
+    LOAD nslo, retrylo
+    CALL retry
+
+tcp:
+    FETCH temp, PACKET_PROTOCOL
+    COMPARE temp, TCP
+    RETURN Z ; If the protocol is TCP, we continue the matching
+    CALL reloadAndRetry ; Otherwise we load the retry address we stored earlier, and retry
+          
+udp:
+    FETCH temp, PACKET_PROTOCOL
+    COMPARE temp, UDP
+    RETURN Z ; If the protocol is UDP, we continue the matching
+    CALL reloadAndRetry ; Otherwise we load the retry address we stored earlier, and retry
+          
+comparechar:
+            COMPARE char, networkInput ; Compare current char with packet char
+            RETURN NZ ; Return if different
+            CALL newAddress ; Else, go to new address
+            JUMP top ; Fetch new char
+            
+drop:
+     CALL newAddress
+     JUMP top
+            
+retry:
+      CALL newAddress ; Go to new address
+      JUMP loop ; Continue with the same char
+
+; Read the instructions from the data table
+nextrowdt:
+     INPUT type, TableRead_port
+     INPUT char, TableRead_port
+     INPUT nshi, TableRead_port
+     INPUT nslo, TableRead_port
+     RETURN
+     
+jumpToTempOffset:
+     OUTPUT offset, NetworkAddressLow_port
+     ; The size of the MAC header plus the size of the IP header and the size
+     ; of the TCP (or UDP) header could not exceed 255 bytes, so we do not need
+     ; to use the high port
+     ;LOAD temp, 00
+     ;OUTPUT temp, NetworkAddressHigh_port
+     INPUT networkInput, NetworkRead_port
+     RETURN
+       
+; Jump to the end of the TCP header
+tcpJump:
+        ADD offset, TCP_HEADER_LEN_OFFSET
+        CALL jumpToTempOffset
+        ; F0 in binary is 11110000
+        ; The size of the TCP header is stored on the first 4 bits of the byte
+        ; Therefore the AND operation is used to set the last 4 bits to 0
+        AND networkInput, F0
+        ; We need to divide the size by 16 to get the 4 leftmost bits, but also
+        ; multiply it by 4 to get it in bytes, so in the end we simply need to
+        ; divide it by 8
+        SR0 networkInput
+        SR0 networkInput
+
+        LOAD offset, packetSize
+        ADD offset, networkInput
+        SUB offset, 01 ; Otherwise the first character would be lost
+        CALL jumpToTempOffset
+        RETURN
+        
+; Jump to the end of the UDP header
+udpJump:
+        ADD offset, UDP_HEADER_SIZE
+        CALL jumpToTempOffset
+        RETURN

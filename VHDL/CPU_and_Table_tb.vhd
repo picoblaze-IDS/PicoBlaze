@@ -60,7 +60,7 @@ ARCHITECTURE behavior OF CPU_and_Table_tb IS
    signal interrupt_ack : std_logic;
 
    -- Clock period definitions
-   constant clk_period : time := 10ns;
+   constant clk_period : time := 2.5ns;
  
 BEGIN
  

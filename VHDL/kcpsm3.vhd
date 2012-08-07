@@ -234,41 +234,7 @@ signal read_active            : std_logic;
 -- contained within generate loops. In each case the information is repeated
 -- in the generic map for functional simulation
 --
-attribute INIT : string; 
-attribute INIT of t_state_lut           : label is "1"; 
-attribute INIT of int_pulse_lut         : label is "0080";
-attribute INIT of int_update_lut        : label is "EAAA";
-attribute INIT of int_value_lut         : label is "04";
-attribute INIT of move_group_lut        : label is "7400";
-attribute INIT of condition_met_lut     : label is "5A3C";
-attribute INIT of normal_count_lut      : label is "2F";
-attribute INIT of call_type_lut         : label is "1000";
-attribute INIT of push_pop_lut          : label is "5400";
-attribute INIT of valid_move_lut        : label is "D";
-attribute INIT of flag_type_lut         : label is "41FC";
-attribute INIT of flag_enable_lut       : label is "8";
-attribute INIT of low_zero_lut          : label is "0001";
-attribute INIT of high_zero_lut         : label is "0001";
-attribute INIT of sel_shadow_zero_lut   : label is "3F";
-attribute INIT of low_parity_lut        : label is "6996";
-attribute INIT of high_parity_lut       : label is "6996";
-attribute INIT of sel_parity_lut        : label is "F3FF";
-attribute INIT of sel_arith_carry_lut   : label is "F3";
-attribute INIT of sel_shift_carry_lut   : label is "C";
-attribute INIT of sel_shadow_carry_lut  : label is "3";
-attribute INIT of register_type_lut     : label is "0145";
-attribute INIT of register_enable_lut   : label is "8";
-attribute INIT of memory_type_lut       : label is "0400";
-attribute INIT of memory_enable_lut     : label is "8000";
-attribute INIT of sel_logical_lut       : label is "FFE2";
-attribute INIT of low_shift_in_lut      : label is "E4";
-attribute INIT of high_shift_in_lut     : label is "E4";
-attribute INIT of shift_carry_lut       : label is "E4";
-attribute INIT of sel_arith_lut         : label is "1F";
-attribute INIT of input_fetch_type_lut  : label is "0002";
-attribute INIT of io_decode_lut         : label is "0010";
-attribute INIT of write_active_lut      : label is "4000";
-attribute INIT of read_active_lut       : label is "0100";
+
 --
 ------------------------------------------------------------------------------------
 --
@@ -673,9 +639,6 @@ begin
   -- Attribute to define LUT contents during implementation 
   -- The information is repeated in the generic map for functional simulation
   --
-  attribute INIT : string; 
-  attribute INIT of vector_select_mux : label is "E4";
-  attribute INIT of value_select_mux  : label is "E4";
   --
   begin
 
@@ -819,9 +782,6 @@ begin
   -- Attribute to define RAM contents during implementation 
   -- The information is repeated in the generic map for functional simulation
   --
-  attribute INIT : string; 
-  attribute INIT of register_bit       : label is "0000"; 
-  attribute INIT of operand_select_mux : label is "E4"; 
   --
   begin
 
@@ -898,8 +858,6 @@ begin
   -- Attribute to define RAM contents during implementation 
   -- The information is repeated in the generic map for functional simulation
   --
-  attribute INIT : string; 
-  attribute INIT of memory_bit : label is "0000000000000000"; 
   --
   begin
 
@@ -947,9 +905,7 @@ begin
   logical_loop: for i in 0 to 7 generate
   --
   -- Attribute to define LUT contents during implementation 
-  -- The information is repeated in the generic map for functional simulation
-  attribute INIT : string; 
-  attribute INIT of logical_lut : label is "6E8A"; 
+  -- The information is repeated in the generic map for functional simulation 
   --
   begin
 
@@ -1033,8 +989,6 @@ begin
     --
     -- Attribute to define LUT contents during implementation 
     -- The information is repeated in the generic map for functional simulation
-    attribute INIT : string; 
-    attribute INIT of shift_mux_lut : label is "E4";
     --
     begin
 
@@ -1053,8 +1007,6 @@ begin
     --
     -- Attribute to define LUT contents during implementation 
     -- The information is repeated in the generic map for functional simulation
-    attribute INIT : string; 
-    attribute INIT of shift_mux_lut : label is "E4";
     --
     begin
 
@@ -1073,8 +1025,6 @@ begin
     --
     -- Attribute to define LUT contents during implementation 
     -- The information is repeated in the generic map for functional simulation
-    attribute INIT : string; 
-    attribute INIT of shift_mux_lut : label is "E4";
     --
     begin
 
@@ -1119,8 +1069,6 @@ begin
   --
   -- Attribute to define LUT contents during implementation 
   -- The information is repeated in the generic map for functional simulation
-  attribute INIT : string; 
-  attribute INIT of arith_lut : label is "96"; 
   --
   begin
 
@@ -1128,8 +1076,6 @@ begin
     --
     -- Attribute to define LUT contents during implementation 
     -- The information is repeated in the generic map for functional simulation
-    attribute INIT : string; 
-    attribute INIT of arith_carry_in_lut : label is "6C";
     --
     begin
 
@@ -1181,8 +1127,6 @@ begin
     --
     -- Attribute to define LUT contents during implementation 
     -- The information is repeated in the generic map for functional simulation
-    attribute INIT : string; 
-    attribute INIT of arith_carry_out_lut : label is "2";
     --
     begin
 
@@ -1260,9 +1204,6 @@ begin
   --
   -- Attribute to define LUT contents during implementation 
   -- The information is repeated in the generic map for functional simulation
-  attribute INIT : string; 
-  attribute INIT of or_lut  : label is "FE"; 
-  attribute INIT of mux_lut : label is "E4"; 
   --
   begin
 
@@ -1407,8 +1348,6 @@ begin
     -- Attribute to define LUT contents during implementation 
     -- The information is repeated in the generic map for functional simulation
     --
-    attribute INIT : string; 
-    attribute INIT of count_lut : label is "6555"; 
     --
     begin
     
@@ -1440,8 +1379,6 @@ begin
     -- Attribute to define LUT contents during implementation 
     -- The information is repeated in the generic map for functional simulation
     --
-    attribute INIT : string; 
-    attribute INIT of count_lut : label is "A999"; 
     --
     begin
     
@@ -1474,8 +1411,6 @@ begin
     -- Attribute to define LUT contents during implementation 
     -- The information is repeated in the generic map for functional simulation
     --
-    attribute INIT : string; 
-    attribute INIT of count_lut : label is "A999"; 
     --
     begin
     
