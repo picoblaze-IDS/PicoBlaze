@@ -1,5 +1,3 @@
-             ;string matching example
-
              ; Match data table
              CONSTANT TableAddressLow_port, 04
              CONSTANT TableAddressHigh_port, 05
@@ -37,6 +35,7 @@
              
              NAMEREG s3, offset
              
+	     ; id of the word to match to output on the match output port
              NAMEREG s4, wordId
 
              ; values for the 'type' entry in a row of match data
@@ -97,7 +96,7 @@ start:       ; initialise the hardware
              OUTPUT temp, TableAddressHigh_port
              
              LOAD offset, IP_HEADER_LEN_OFFSET
-             CALL jumpToTempOffset
+             CALL jumpToTempOffset ; jump to where the length of the packet is stored in the IP packet itself
              ; 0F in binary is 00001111
              ; The size of the IP packet is stored on the last 4 bits of the first byte
              ; Therefore the AND operation is used to set the first 4 bits (the version) to 0
@@ -105,17 +104,15 @@ start:       ; initialise the hardware
              LOAD packetSize, networkInput
              
              LOAD offset, IP_PROTOCOL_OFFSET
-             ; jump to the specified offset
-             CALL jumpToTempOffset
-             ; store the protocol into the scratchpad ram
-             STORE networkInput, PACKET_PROTOCOL
+             CALL jumpToTempOffset ; jump to where the transport protocol is stored in the IP packet
+             STORE networkInput, PACKET_PROTOCOL ; store the protocol into the scratchpad ram
 
              ;
              ; store the packet IPs into the scratchpad ram
              ;
-             LOAD offset, IP_PROTOCOL_SOURCE_ADDR_OFFSET ; load the offset in a register
+             LOAD offset, IP_PROTOCOL_SOURCE_ADDR_OFFSET ; load the source address offset in a register
              CALL jumpToTempOffset ; jump to this offset
-             STORE networkInput, PACKET_IPFROM ; store the corresponding byte into the scratchpad ram
+             STORE networkInput, PACKET_IPFROM ; store the first byte of the address into the scratchpad ram
              
              ADD offset, 01
              CALL jumpToTempOffset
@@ -153,7 +150,7 @@ start:       ; initialise the hardware
              SL0 packetSize
              ADD packetSize, IP_HEADER_LEN_OFFSET ; Add the size of the Ethernet frame
              LOAD offset, packetSize
-             CALL jumpToTempOffset ; Jump of the size of the IP packet
+             CALL jumpToTempOffset ; Jump of the size of the IP packet + ethernet frame
              STORE networkInput, PACKET_PORTFROM
              
              ADD offset, 01
@@ -169,7 +166,7 @@ start:       ; initialise the hardware
              STORE networkInput, PACKET_PORTTO2
 
              SUB offset, 03 ; Remove 3 to go back to the beginning of the TCP packet
-             FETCH temp, PACKET_PROTOCOL
+             FETCH temp, PACKET_PROTOCOL ; put the transport protocol in the temp register
              ;
              ; We jump according to the protocol we fetched in the IP packet
              ;
@@ -435,12 +432,13 @@ tcpJump:
 
         LOAD offset, packetSize
         ADD offset, networkInput
-        SUB offset, 01 ; Otherwise the first character would be lost
+        SUB offset, 01 ; Otherwise the first character would be lost (because both the jumpToTempOffset and top subroutines fetch a character from the packet)
         CALL jumpToTempOffset
         RETURN
         
 ; Jump to the end of the UDP header
 udpJump:
         ADD offset, UDP_HEADER_SIZE
+	SUB offset, 01 ; Otherwise the first character would be lost (because both the jumpToTempOffset and top subroutines fetch a character from the packet)
         CALL jumpToTempOffset
         RETURN
