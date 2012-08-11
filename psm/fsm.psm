@@ -426,7 +426,7 @@ tcpJump:
         AND networkInput, F0
         ; We need to divide the size by 16 to get the 4 leftmost bits, but also
         ; multiply it by 4 to get it in bytes, so in the end we simply need to
-        ; divide it by 8
+        ; divide it by 4
         SR0 networkInput
         SR0 networkInput
 
