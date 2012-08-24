@@ -265,17 +265,18 @@ testmatch:
           CALL nextrowdt ; Get the "port to" range
           CALL checkPortToRange
           OUTPUT wordId, Match_port ; If we have a match, we output the word's "id" to match port
-          JUMP loop ; Get a new byte from the network
+          CALL reloadAndRetry ; Jump to the retry address
+	  RETURN
 
 checkPortFromRange:
                FETCH temp, PACKET_PORTFROM
-               SUB temp, type ; We substract the first part of the port of the packet with the first part of the port we have to match
+               SUB temp, type ; We subtract the first part of the port of the packet with the first part of the port we have to match
                CALL C, reloadAndRetry ; If the carry flag is set (the result is negative), the port is outside the lowest range, so we stop the matching
                COMPARE temp, 00
                FETCH temp, PACKET_PORTFROM2
                CALL Z, checkLowestPortSecondByte ; If the first bytes are equal, we have to compare the last bytes
                FETCH temp, PACKET_PORTFROM
-               SUB nshi, temp ; We substract the first part of the port we have to match with the first part of the port of the packet
+               SUB nshi, temp ; We subtract the first part of the port we have to match with the first part of the port of the packet
                CALL C, reloadAndRetry ; If the carry flag is set (the result is negative), the port is outside the highest range, so we stop the matching
                COMPARE nshi, 00
                FETCH temp, PACKET_PORTFROM2
@@ -284,13 +285,13 @@ checkPortFromRange:
 
 checkPortToRange:
                FETCH temp, PACKET_PORTTO
-               SUB temp, type ; We substract the first part of the port of the packet with the first part of the port we have to match
+               SUB temp, type ; We subtract the first part of the port of the packet with the first part of the port we have to match
                CALL C, reloadAndRetry ; If the carry flag is set (the result is negative), the port is outside the lowest range, so we stop the matching
                COMPARE temp, 00
                FETCH temp, PACKET_PORTTO2
                CALL Z, checkLowestPortSecondByte ; If the first bytes are equal, we have to compare the last bytes
                FETCH temp, PACKET_PORTTO
-               SUB nshi, temp ; We substract the first part of the port we have to match with the first part of the port of the packet
+               SUB nshi, temp ; We subtract the first part of the port we have to match with the first part of the port of the packet
                CALL C, reloadAndRetry ; If the carry flag is set (the result is negative), the port is outside the highest range, so we stop the matching
                COMPARE nshi, 00
                FETCH temp, PACKET_PORTTO2
@@ -309,7 +310,7 @@ checkHighestPortSecondByte:
 
 checkIPFromLowRange:
                 FETCH temp, PACKET_IPFROM
-                SUB temp, type ; We substract the first part of the IP address of the packet with the first part of the IP address we have to match
+                SUB temp, type ; We subtract the first part of the IP address of the packet with the first part of the IP address we have to match
                 CALL C, reloadAndRetry ; If the carry flag is set (the result is negative), the IP address is outside the range, so we stop the matching
                 FETCH temp, PACKET_IPFROM2
                 SUB temp, char
@@ -324,7 +325,7 @@ checkIPFromLowRange:
 
 checkIPFromHighRange:
                 FETCH temp, PACKET_IPFROM
-                SUB type, temp ; We substract the first part of the IP address we have to match with the first part of the IP address of the packet
+                SUB type, temp ; We subtract the first part of the IP address we have to match with the first part of the IP address of the packet
                 CALL C, reloadAndRetry ; If the carry flag is set (the result is negative), the IP address is outside the range, so we stop the matching
                 FETCH temp, PACKET_IPFROM2
                 SUB char, temp
@@ -339,7 +340,7 @@ checkIPFromHighRange:
 
 checkIPToLowRange:
                 FETCH temp, PACKET_IPTO
-                SUB temp, type ; We substract the first part of the IP address of the packet with the first part of the IP address we have to match
+                SUB temp, type ; We subtract the first part of the IP address of the packet with the first part of the IP address we have to match
                 CALL C, reloadAndRetry ; If the carry flag is set (the result is negative), the IP address is outside the range, so we stop the matching
                 FETCH temp, PACKET_IPTO2
                 SUB temp, char
@@ -354,7 +355,7 @@ checkIPToLowRange:
 
 checkIPToHighRange:
                 FETCH temp, PACKET_IPTO
-                SUB type, temp ; We substract the first part of the IP address we have to match with the first part of the IP address of the packet
+                SUB type, temp ; We subtract the first part of the IP address we have to match with the first part of the IP address of the packet
                 CALL C, reloadAndRetry ; If the carry flag is set (the result is negative), the IP address is outside the range, so we stop the matching
                 FETCH temp, PACKET_IPTO2
                 SUB char, temp
